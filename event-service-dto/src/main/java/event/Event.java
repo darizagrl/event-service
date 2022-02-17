@@ -1,10 +1,16 @@
 package event;
 
+import lombok.*;
+
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
 public class Event {
 
-    private String id;
+    private Integer id;
 
     private String title;
 

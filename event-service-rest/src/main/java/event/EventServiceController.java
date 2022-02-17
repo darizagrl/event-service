@@ -1,42 +1,53 @@
 package event;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController("/events")
+@RequiredArgsConstructor
 public class EventServiceController {
 
+    private final EventService service;
+
     @PostMapping()
-    public ResponseEntity<Event> createEvent() {
-        return ResponseEntity.ok(new Event());
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public ResponseEntity<Event> createEvent(@RequestBody Event event) {
+        return ResponseEntity.ok(service.createEvent(event));
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<Event> updateEvent(@PathVariable String id) {
-        return ResponseEntity.ok(new Event());
+    @PutMapping("/{id}")
+    @ResponseStatus(code = HttpStatus.OK)
+    public ResponseEntity<Event> updateEvent(@PathVariable String id, @RequestBody Event event) {
+        return ResponseEntity.ok(service.updateEvent(event));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Event> getEvent(@PathVariable String id) {
-        return ResponseEntity.ok(new Event());
+    @ResponseStatus(code = HttpStatus.OK)
+    public ResponseEntity<Event> getEvent(@PathVariable Integer id) {
+        return ResponseEntity.ok(service.getEvent(id));
     }
 
     @DeleteMapping("/{id}")
-    public String deleteEvent(@PathVariable String id) {
-        return "deleted successfully";
+    @ResponseStatus(code = HttpStatus.OK)
+    public HttpStatus deleteEvent(@PathVariable Integer id) {
+        service.deleteEvent(id);
+        return HttpStatus.OK;
     }
 
     @GetMapping()
+    @ResponseStatus(code = HttpStatus.OK)
     public ResponseEntity<List<Event>> getAllEvents() {
-        return ResponseEntity.ok(new ArrayList<>());
+        return ResponseEntity.ok(service.getAllEvents());
     }
 
-    @GetMapping("/titles/{title}")
-    public ResponseEntity<List<Event>> getAllEventsByTitle(@PathVariable String title) {
-        return ResponseEntity.ok(new ArrayList<>());
+    @GetMapping()
+    @ResponseStatus(code = HttpStatus.OK)
+    public ResponseEntity<List<Event>> getAllEventsByTitle(@RequestParam String title) {
+        return ResponseEntity.ok(service.getAllEventsByTitle(title));
     }
 
 }

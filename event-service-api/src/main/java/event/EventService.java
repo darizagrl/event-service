@@ -1,15 +1,19 @@
 package event;
 
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
+@Service
 public interface EventService {
-    Event createEvent();
 
-    Event updateEvent(String id);
+    Event createEvent(Event event);
 
-    Event getEvent(String id);
+    Event updateEvent(Event event);
 
-    void deleteEvent(String id);
+    Event getEvent(Integer id);
+
+    void deleteEvent(Integer id);
 
     List<Event> getAllEvents();
 
