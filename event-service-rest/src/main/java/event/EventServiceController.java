@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/events")
+@RestController
+@RequestMapping("/events")
 @RequiredArgsConstructor
 public class EventServiceController {
 
@@ -21,7 +22,7 @@ public class EventServiceController {
 
     @PutMapping("/{id}")
     @ResponseStatus(code = HttpStatus.OK)
-    public ResponseEntity<Event> updateEvent(@PathVariable String id, @RequestBody Event event) {
+    public ResponseEntity<Event> updateEvent(@PathVariable Integer id, @RequestBody Event event) {
         return ResponseEntity.ok(service.updateEvent(event));
     }
 
@@ -32,10 +33,10 @@ public class EventServiceController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(code = HttpStatus.OK)
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public HttpStatus deleteEvent(@PathVariable Integer id) {
         service.deleteEvent(id);
-        return HttpStatus.OK;
+        return HttpStatus.NO_CONTENT;
     }
 
     @GetMapping()
