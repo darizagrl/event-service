@@ -1,17 +1,15 @@
 package event;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "events")
 public class Event {
