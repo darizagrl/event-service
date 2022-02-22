@@ -3,14 +3,17 @@ package event;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api
+@Validated
+@Api(value = "events", tags = "event")
 @RestController
 @RequestMapping("/events")
 @RequiredArgsConstructor
@@ -18,41 +21,51 @@ public class EventServiceController {
 
     private final EventService service;
 
-    @ApiOperation("Create a new event")
+    @ApiOperation(value = "Add a event", nickname = "createEvent", notes = "Endpoint for creating a new event",
+            response = Event.class, tags = {"event"}, produces = "application/json", consumes = "application/json")
+    @ApiResponse(code = 201, message = "The event was successfully created", response = Event.class)
     @PostMapping()
     @ResponseStatus(code = HttpStatus.CREATED)
-    public ResponseEntity<Event> createEvent(@RequestBody Event event) {
+    public ResponseEntity<Event> createEvent(@ApiParam(value = "Event object that needs to be added", required = true)
+                                             @RequestBody Event event) {
         return ResponseEntity.ok(service.createEvent(event));
     }
 
-    @ApiOperation("Update an existing event")
+    @ApiOperation(value = "Update an existing event", nickname = "updateEvent", notes = "Endpoint for updating an existing event",
+            response = Event.class, tags = {"event"}, produces = "application/json", consumes = "application/json")
+    @ApiResponse(code = 200, message = "The event was successfully updated", response = Event.class)
     @PutMapping()
     @ResponseStatus(code = HttpStatus.OK)
-    public ResponseEntity<Event> updateEvent(@RequestBody Event event) {
+    public ResponseEntity<Event> updateEvent(@ApiParam(value = "Event object that needs to be updated", required = true) @RequestBody Event event) {
         return ResponseEntity.ok(service.updateEvent(event));
     }
 
-    @ApiOperation("Get an event by id")
+    @ApiOperation(value = "Returns an event by id", nickname = "getEvent", notes = "Endpoint for receiving an event by id",
+            response = Event.class, tags = {"event"}, produces = "application/json")
+    @ApiResponse(code = 200, message = "successful operation", response = Event.class)
     @GetMapping("/{id}")
     @ResponseStatus(code = HttpStatus.OK)
-    public ResponseEntity<Event> getEvent(@PathVariable Integer id) {
+    public ResponseEntity<Event> getEvent(@ApiParam(value = "ID of event to return", required = true)
+                                          @PathVariable Integer id) {
         return ResponseEntity.ok(service.getEvent(id));
     }
 
-    @ApiOperation("Delete an event")
+    @ApiOperation(value = "Deletes an event", nickname = "deleteEvent", notes = "Endpoint for event deletion", tags = {"event"})
+    @ApiResponse(code = 204, message = "The event was successfully deleted")
     @DeleteMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public HttpStatus deleteEvent(@PathVariable Integer id) {
+    public HttpStatus deleteEvent(@ApiParam(value = "id", required = true) @PathVariable Integer id) {
         service.deleteEvent(id);
         return HttpStatus.NO_CONTENT;
     }
 
-    @ApiOperation("Get all events")
+    @ApiOperation(value = "Return events list", nickname = "getAllEvents", notes = "Endpoint for receiving a list event",
+            tags = {"event"}, produces = "application/json")
+    @ApiResponse(code = 200, message = "successful operation", response = Event.class, responseContainer = "List")
     @GetMapping()
     @ResponseStatus(code = HttpStatus.OK)
-    public ResponseEntity<List<Event>> getAllEvents(@RequestParam(required = false)
-                                                    @ApiParam(name = "title", type = "String",
-                                                            value = "Title of the event") String title) {
+    public ResponseEntity<List<Event>> getAllEvents(@ApiParam(value = "Title of events to return")
+                                                    @RequestParam(required = false) String title) {
         if (title != null) {
             return ResponseEntity.ok(service.getAllEventsByTitle(title));
         }

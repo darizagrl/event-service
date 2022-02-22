@@ -1,0 +1,130 @@
+swagger: "2.0"
+info:
+  description: "An event management service that supports basic CRUD operations."
+  version: "1.0.0"
+  title: "Events Service"
+schemes:
+- "http"
+paths:
+  /events:
+    post:
+      tags:
+      - "event"
+      summary: "Add a event"
+      description: "Endpoint for creating a new event"
+      operationId: "createEvent"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "eventBody"
+        description: "Event object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/Event"
+      responses:
+        "201":
+          description: "The event was successfully created"
+          schema:
+            $ref: "#/definitions/Event"
+    put:
+      tags:
+      - "event"
+      summary: "Update an existing event"
+      description: "Endpoint for updating an existing event"
+      operationId: "updateEvent"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Event object that needs to be updated"
+        required: true
+        schema:
+          $ref: "#/definitions/Event"
+      responses:
+        "200":
+          description: "The event was successfully updated"
+          schema:
+            $ref: "#/definitions/Event"
+    get:
+      tags:
+      - "event"
+      summary: "Return events list"
+      description: "Endpoint for receiving a list event"
+      operationId: "getAllEvents"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "title"
+        in: "query"
+        description: "Title of events to return"
+        required: false
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Event"
+  /events/{id}:
+    get:
+      tags:
+      - "event"
+      summary: "Returns an event by id"
+      description: "Endpoint for receiving an event by id"
+      operationId: "getEvent"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of event to return"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Event"
+    delete:
+      tags:
+      - "event"
+      summary: "Deletes an event"
+      description: "Endpoint for event deletion"
+      operationId: "deleteEvent"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+      responses:
+        "204":
+          description: "The event was successfully deleted"
+
+definitions:
+  Event:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      title:
+        type: "string"
+        example: "Atlas"
+      place:
+        type: "string"
+        example: "Garden"
+      speaker:
+        type: "string"
+        example: "Ostrovsky"
+      eventType:
+        type: "string"
+        example: "Lecture"
+      dateTime:
+        type: "string"
+        format: "date-time"
